@@ -1,0 +1,73 @@
+{
+  "name": "@fastly/performance-observer-polyfill",
+  "version": "0.0.0-development",
+  "main": "dist/index.js",
+  "module": "src/index.js",
+  "files": [
+    "src",
+    "dist",
+    "polyfill"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fastly/performance-observer-polyfill.git"
+  },
+  "publishConfig": {
+	"access": "public"
+  },
+  "keywords": [
+    "performance",
+    "performanceobserver",
+    "polyfill"
+  ],
+  "types": "src/@types/index.d.ts",
+  "scripts": {
+    "test": "npm run test:once && npm run lint",
+    "test:once": "jest --coverage",
+    "test:watch": "jest --watch",
+    "start": "webpack-dev-server --progress --open --config webpack.dev.js",
+    "build": "webpack --config webpack.prod.js",
+    "build:dev": "webpack --config webpack.dev.js",
+    "lint": "tsc --noEmit && eslint '*/**/*.ts' --fix",
+    "release": "npx np",
+    "prepublishOnly": "npm run build"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.4.4",
+    "@babel/core": "^7.4.5",
+    "@babel/plugin-proposal-class-properties": "^7.4.4",
+    "@babel/plugin-proposal-object-rest-spread": "^7.4.4",
+    "@babel/preset-env": "^7.4.5",
+    "@babel/preset-typescript": "^7.3.3",
+    "@babel/types": "^7.4.4",
+    "@types/jest": "^24.0.13",
+    "@typescript-eslint/eslint-plugin": "^1.9.0",
+    "@typescript-eslint/parser": "^1.9.0",
+    "babel-jest": "^24.8.0",
+    "babel-loader": "^8.0.6",
+    "clean-webpack-plugin": "^2.0.2",
+    "core-js": "^3.1.3",
+    "eslint": "^5.16.0",
+    "eslint-config-prettier": "^4.3.0",
+    "eslint-loader": "^2.1.2",
+    "eslint-plugin-prettier": "^3.1.0",
+    "html-webpack-plugin": "^3.2.0",
+    "husky": "^2.3.0",
+    "jest": "^24.8.0",
+    "jest-mock-random": "^1.0.2",
+    "prettier": "^1.17.1",
+    "typescript": "^3.4.5",
+    "webpack": "^4.32.2",
+    "webpack-bundle-analyzer": "^3.3.2",
+    "webpack-cli": "^3.3.2",
+    "webpack-dev-server": "^3.4.1",
+    "webpack-merge": "^4.2.1"
+  },
+  "dependencies": {},
+  "husky": {
+    "hooks": {
+      "pre-push": "npm test"
+    }
+  }
+}

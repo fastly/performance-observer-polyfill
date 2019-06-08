@@ -1,0 +1,14 @@
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+node_modules/
+coverage/
+.npm
+.npmrc
+.eslintcache
+*.tgz
+.yarn-integrity
+dist/
+polyfill/index.js
+polyfill/index.html
+polyfill/report.html
