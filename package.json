@@ -1,6 +1,6 @@
 {
   "name": "@fastly/performance-observer-polyfill",
-  "version": "0.0.0-development",
+  "version": "1.0.0",
   "main": "dist/index.js",
   "module": "src/index.js",
   "files": [
@@ -14,7 +14,7 @@
     "url": "https://github.com/fastly/performance-observer-polyfill.git"
   },
   "publishConfig": {
-	"access": "public"
+    "access": "public"
   },
   "keywords": [
     "performance",
