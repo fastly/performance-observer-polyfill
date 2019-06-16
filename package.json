@@ -2,7 +2,6 @@
   "name": "@fastly/performance-observer-polyfill",
   "version": "1.0.0",
   "main": "dist/index.js",
-  "module": "src/index.js",
   "files": [
     "src",
     "dist",
