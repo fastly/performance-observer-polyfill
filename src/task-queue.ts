@@ -11,7 +11,7 @@ class PollingPerformanceObserverTaskQueue {
     registeredObservers = new Set(),
     processedEntries = new Set(),
     interval = 100,
-    context = window || self
+    context = self
   }: PerformanceObserverTaskQueueOptions = {}) {
     this.registeredObservers = registeredObservers;
     this.processedEntries = processedEntries;
