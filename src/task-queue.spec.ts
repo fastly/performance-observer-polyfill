@@ -1,5 +1,6 @@
 import PollingPerformanceObserverTaskQueue from "./task-queue";
 import PerformanceObserverEntryList from "./entry-list";
+import PollingPerformanceObserver from "./observer";
 import entries from "./fixtures/entries";
 
 const entriesFixture = entries as PerformanceEntry[];

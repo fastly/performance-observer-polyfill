@@ -12,6 +12,12 @@ const isValidType = (type: string): boolean =>
 
 const globalTaskQueue = new PerformanceObserverTaskQueue();
 
+interface PollingPerformanceObserver extends PerformanceObserver {
+  buffer: Set<PerformanceEntry>;
+  callback: PerformanceObserverCallback;
+  entryTypes: string[];
+}
+
 class PerformanceObserver implements PollingPerformanceObserver {
   public callback: PerformanceObserverCallback;
   public buffer: Set<PerformanceEntry>;

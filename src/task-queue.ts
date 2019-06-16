@@ -1,4 +1,12 @@
 import EntryList from "./entry-list";
+import PollingPerformanceObserver from "./observer";
+
+interface PerformanceObserverTaskQueueOptions {
+  registeredObservers?: Set<PollingPerformanceObserver>;
+  processedEntries?: Set<PerformanceEntry>;
+  interval?: number;
+  context?: any;
+}
 
 class PollingPerformanceObserverTaskQueue {
   private registeredObservers: Set<PollingPerformanceObserver>;
