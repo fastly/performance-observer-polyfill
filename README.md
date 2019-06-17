@@ -12,7 +12,7 @@ The [`PerformanceObserver`](https://developer.mozilla.org/en-US/docs/Web/API/Per
 
 This polyfill allows consumers to use the `PerformanceObserver` interface within browser environments, which have basic Performance Timeline support (I.e. `window.performance.getEntries()`), but don't have observer support. 
 
-The polypill works by falling back to polling the Performance Timeline on a given interval and calling all subscribed observers with the resulting set of entires. 
+The polyfill works by falling back to polling the Performance Timeline on a given interval and calling all subscribed observers with the resulting set of entires. 
 
 ## Quick links
 - [Installation](#installation)
@@ -56,7 +56,7 @@ observer.observe({entryTypes: ['resource']})
 ```
 
 ## Caveats
-As the polypill implements the PerformanceObserver interface by falling back to polling the Performance Timeline via a call to `window.performance.getEntries()` we are limited to only expose timeline entry types that are supported by `getEntries()`. Therefore the polypill can only be used to observe the entry types: `navigation`, `resource` and `mark`. Newer entry types such as `paint` are only exposed by the native PerformanceObserver implementation and thus not polyfillable. 
+As the polyfill implements the PerformanceObserver interface by falling back to polling the Performance Timeline via a call to `window.performance.getEntries()` we are limited to only expose timeline entry types that are supported by `getEntries()`. Therefore the polyfill can only be used to observe the entry types: `navigation`, `resource` and `mark`. Newer entry types such as `paint` are only exposed by the native PerformanceObserver implementation and thus not polyfillable. 
 
 ## Development
 
