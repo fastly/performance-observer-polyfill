@@ -1,7 +1,12 @@
 import PerformanceObserverTaskQueue from "./task-queue";
 import EntryList from "./entry-list";
 
-const VALID_TYPES = ["mark", "measure", "navigation", "resource"];
+const VALID_TYPES: readonly string[] = [
+  "mark",
+  "measure",
+  "navigation",
+  "resource"
+];
 const ERRORS = {
   "no-entry-types": `Failed to execute 'observe' on 'PerformanceObserver': required member entryTypes is undefined.`,
   "invalid-entry-types": `Failed to execute 'observe' on 'PerformanceObserver': A Performance Observer MUST have at least one valid entryType in its entryTypes attribute.`
@@ -22,6 +27,7 @@ class PerformanceObserver implements PollingPerformanceObserver {
   public callback: PerformanceObserverCallback;
   public buffer: Set<PerformanceEntry>;
   public entryTypes: string[] = [];
+  public static readonly supportedEntryTypes = VALID_TYPES;
   private taskQueue: PerformanceObserverTaskQueue;
 
   public constructor(
