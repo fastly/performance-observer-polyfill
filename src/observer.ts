@@ -8,8 +8,12 @@ const VALID_TYPES: readonly string[] = [
   "resource"
 ];
 const ERRORS = {
-  "no-entry-types": `Failed to execute 'observe' on 'PerformanceObserver': required member entryTypes is undefined.`,
-  "invalid-entry-types": `Failed to execute 'observe' on 'PerformanceObserver': A Performance Observer MUST have at least one valid entryType in its entryTypes attribute.`
+  "no-entry-types": `Failed to execute 'observe' on 'PerformanceObserver': either an 'entryTypes' or 'type' member must be present.`,
+  "both-entry-types": `Failed to execute 'observe' on 'PerformanceObserver': either an 'entryTypes' or 'type' member must be present, not both.`
+};
+const WARNINGS = {
+  "no-valid-entry-types": `Aborting 'observe' on 'PerformanceObserver': no valid entry types present in either 'entryTypes' or 'type' member.`,
+  "entry-types-removed": `Invalid or unsupported entry types provided to 'observe' on 'PerformanceObserver'.`
 };
 
 const isValidType = (type: string): boolean =>
@@ -40,14 +44,32 @@ class PerformanceObserver implements PollingPerformanceObserver {
   }
 
   public observe(options?: PerformanceObserverInit): void {
-    if (!options || !options.entryTypes) {
+    if (!options) {
       throw new Error(ERRORS["no-entry-types"]);
     }
 
-    const entryTypes: string[] = options.entryTypes.filter(isValidType);
+    if (options.entryTypes && options.type) {
+      throw new Error(ERRORS["both-entry-types"]);
+    }
+
+    let rawEntryTypes: string[];
+    if (options.entryTypes) {
+      rawEntryTypes = options.entryTypes;
+    } else if (options.type) {
+      rawEntryTypes = [options.type];
+    } else {
+      throw new Error(ERRORS["no-entry-types"]);
+    }
+
+    const entryTypes: string[] = rawEntryTypes.filter(isValidType);
+
+    if (entryTypes.length > 0 && entryTypes.length !== rawEntryTypes.length) {
+      console.warn(WARNINGS["entry-types-removed"]);
+    }
 
     if (!entryTypes.length) {
-      throw new Error(ERRORS["invalid-entry-types"]);
+      console.warn(WARNINGS["no-valid-entry-types"]);
+      return;
     }
 
     this.entryTypes = entryTypes;

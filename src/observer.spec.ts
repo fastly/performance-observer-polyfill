@@ -49,14 +49,36 @@ describe("PerformanceObserver", (): void => {
   });
 
   describe("#observe", (): void => {
-    beforeEach((): void => mockTaskQueueAdd.mockClear());
+    const originalWarn = console.warn;
+    let consoleOutput: string[] = [];
+    const mockedWarn = (output: string): number => consoleOutput.push(output);
 
-    it("should throw if no entryTypes are supplied", (): void => {
+    beforeEach((): void => {
+      mockTaskQueueAdd.mockClear();
+      consoleOutput = [];
+      console.warn = mockedWarn;
+    });
+    afterEach((): void => {
+      console.warn = originalWarn;
+    });
+
+    it("should throw if no entryTypes or type are supplied", (): void => {
       const observer = new PerformanceObserver(
         callbackFixture,
         new PerformanceObserverTaskQueue()
       );
       expect(observer.observe).toThrow();
+      expect((): void => observer.observe({ buffered: false })).toThrow();
+    });
+
+    it("should throw if both entryTypes and type are supplied", (): void => {
+      const observer = new PerformanceObserver(
+        callbackFixture,
+        new PerformanceObserverTaskQueue()
+      );
+      expect((): void =>
+        observer.observe({ entryTypes: ["resource"], type: "resource" })
+      ).toThrow();
     });
 
     it("should validate entryTypes and ignore any invalid types", (): void => {
@@ -69,16 +91,39 @@ describe("PerformanceObserver", (): void => {
       expect(observer.entryTypes).toEqual(["resource", "mark"]);
     });
 
-    it("should throw if no vaild entryTypes are supplied", (): void => {
+    it("should warn if invalid entryTypes are supplied", (): void => {
       const observer = new PerformanceObserver(
         callbackFixture,
         new PerformanceObserverTaskQueue()
       );
-      expect((): void => observer.observe({ entryTypes: ["invalid"] })).toThrow;
+      observer.observe({ entryTypes: ["resource", "mark", "bad"] });
+      expect(consoleOutput).toHaveLength(1);
     });
 
-    it("should queue observer", (): void => {
+    it("should abort if no valid entryTypes are supplied", (): void => {
+      const observer = new PerformanceObserver(
+        callbackFixture,
+        new PerformanceObserverTaskQueue()
+      );
+
+      observer.observe({ entryTypes: ["invalid"] });
+      expect(consoleOutput).toHaveLength(1);
+      expect(mockTaskQueueAdd).toHaveBeenCalledTimes(0);
+    });
+
+    it("should queue observer with valid entryTypes", (): void => {
       const fixture = { entryTypes: ["resource"] };
+      const observer = new PerformanceObserver(
+        callbackFixture,
+        new PerformanceObserverTaskQueue()
+      );
+      observer.observe(fixture);
+      expect(mockTaskQueueAdd).toHaveBeenCalledTimes(1);
+      expect(mockTaskQueueAdd).toHaveBeenCalledWith(observer);
+    });
+
+    it("should queue observer with valid type", (): void => {
+      const fixture = { type: "resource" };
       const observer = new PerformanceObserver(
         callbackFixture,
         new PerformanceObserverTaskQueue()
