@@ -1,28 +1,27 @@
 {
   "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "dist/esm",
+    "target": "es2015",
+    "module": "es2015",
+    "moduleResolution": "node",
     "strict": true,
     "allowSyntheticDefaultImports": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitReturns": true,
     "esModuleInterop": true,
     "noUnusedLocals": true,
-    "declaration": false,
-    "target": "ES2015",
-    "module": "ES2015",
-    "noEmit": true,
-    "moduleResolution": "node",
-    "removeComments": true
+    "declarationDir": "dist/esm/types",
+    "declaration": true
   },
-  "lib": [
-    "DOM",
-    "ES2015",
-    "ES2020"
-  ],
+  "lib": ["DOM", "ES2015", "ES2020"],
   "include": [
     "src/**/*"
   ],
   "exclude": [
     "node_modules",
+    "src/fixtures/**/*",
+    "**/*.spec.ts",
     "dist"
   ]
 }
