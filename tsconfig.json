@@ -6,14 +6,15 @@
     "noImplicitReturns": true,
     "esModuleInterop": true,
     "noUnusedLocals": true,
-    "declarationDir": "dist/types",
-    "declaration": true,
-    "target": "esnext",
-    "module": "commonjs",
-    "noEmit": true
+    "target": "ES2015",
+    "module": "ES2015",
+    "moduleResolution": "node",
+    "removeComments": true
   },
   "lib": [
-    "DOM"
+    "DOM",
+    "ES2015",
+    "ES2020"
   ],
   "include": [
     "src/**/*"
