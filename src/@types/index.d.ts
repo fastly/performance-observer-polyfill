@@ -13,6 +13,4 @@ declare namespace PollingPerformanceObserver {
   }
 }
 
-declare const PollingPerformanceObserver: typeof PerformanceObserver;
-
 export default PollingPerformanceObserver;
