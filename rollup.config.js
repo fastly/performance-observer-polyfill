@@ -44,7 +44,6 @@ export default [
       resolve({ extensions }),
       typescript({
         target: "es5",
-        declaration: false
       }),
       ...plugins[env]
     ],
@@ -60,7 +59,9 @@ export default [
       resolve({ extensions }),
       typescript({
         declaration: true,
-        declarationDir: path.resolve(__dirname, "dist", "esm", "types")
+        declarationDir: path.resolve(__dirname, "dist", "esm", "types"),
+        outDir: path.resolve(__dirname, "dist", "esm"),
+        rootDir: path.resolve(__dirname, "src")
       }),
       ...plugins[env]
     ],

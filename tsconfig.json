@@ -6,10 +6,8 @@
     "noImplicitReturns": true,
     "esModuleInterop": true,
     "noUnusedLocals": true,
-    "declaration": false,
     "target": "ES2015",
     "module": "ES2015",
-    "noEmit": true,
     "moduleResolution": "node",
     "removeComments": true
   },
