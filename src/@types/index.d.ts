@@ -13,4 +13,7 @@ declare namespace PollingPerformanceObserver {
   }
 }
 
+// eslint-disable-next-line no-redeclare
+declare const PollingPerformanceObserver: typeof PerformanceObserver;
+
 export default PollingPerformanceObserver;
