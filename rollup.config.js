@@ -58,7 +58,6 @@ export default [
     plugins: [
       resolve({ extensions }),
       typescript({
-        target: "es5",
         declaration: true,
         declarationDir: path.resolve(__dirname, "dist", "esm", "types"),
         outDir: path.resolve(__dirname, "dist", "esm"),
