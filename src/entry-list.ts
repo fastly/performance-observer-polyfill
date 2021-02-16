@@ -1,9 +1,7 @@
-export default class EntryList extends Array<PerformanceEntry>
-  implements PerformanceEntryList {
+export default class EntryList implements PerformanceObserverEntryList {
   private _entries: PerformanceEntry[];
 
   public constructor(entries: PerformanceEntry[]) {
-    super(...entries);
     this._entries = entries;
   }
 
