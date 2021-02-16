@@ -1,5 +1,4 @@
 import PerformanceObserverTaskQueue from "./task-queue";
-import EntryList from "./entry-list";
 
 const VALID_TYPES: readonly string[] = [
   "mark",
@@ -82,8 +81,7 @@ class PerformanceObserver implements PollingPerformanceObserver {
   }
 
   public takeRecords(): PerformanceEntryList {
-    const entries = Array.from(this.buffer);
-    return new EntryList(entries);
+    return Array.from(this.buffer);
   }
 }
 
