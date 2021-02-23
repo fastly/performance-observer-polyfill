@@ -1,22 +1,19 @@
+import { mocked } from "ts-jest/utils";
 import PerformanceObserver from "./observer";
 import PerformanceObserverTaskQueue from "./task-queue";
 
-const mockTaskQueueAdd = jest.fn();
-const mockTaskQueueRemove = jest.fn();
 jest.mock(
   "./task-queue",
-  (): jest.Mock => {
-    return jest.fn().mockImplementation((): any => {
+  (): jest.Mock =>
+    jest.fn().mockImplementation((): any => {
       return {
-        add: mockTaskQueueAdd,
-        remove: mockTaskQueueRemove
+        add: jest.fn(),
+        remove: jest.fn()
       };
-    });
-  }
+    })
 );
 
-// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
-const callbackFixture = (entires: PerformanceObserverEntryList): void => {};
+const callbackFixture = jest.fn();
 
 describe("PerformanceObserver", (): void => {
   it("should return a class", (): void => {
@@ -50,101 +47,79 @@ describe("PerformanceObserver", (): void => {
 
   describe("#observe", (): void => {
     const originalWarn = console.warn;
-    let consoleOutput: string[] = [];
-    const mockedWarn = (output: string): number => consoleOutput.push(output);
-
-    beforeEach((): void => {
-      mockTaskQueueAdd.mockClear();
-      consoleOutput = [];
-      console.warn = mockedWarn;
+    const mockedConsoleWarn = jest.fn();
+    const mockTaskQueue = mocked(new PerformanceObserverTaskQueue(), true);
+    beforeAll((): void => {
+      console.warn = mockedConsoleWarn;
     });
     afterEach((): void => {
+      jest.resetAllMocks();
+    });
+    afterAll((): void => {
       console.warn = originalWarn;
     });
 
     it("should throw if no entryTypes or type are supplied", (): void => {
-      const observer = new PerformanceObserver(
-        callbackFixture,
-        new PerformanceObserverTaskQueue()
-      );
+      const observer = new PerformanceObserver(callbackFixture, mockTaskQueue);
       expect(observer.observe).toThrow();
       expect((): void => observer.observe({ buffered: false })).toThrow();
     });
 
     it("should throw if both entryTypes and type are supplied", (): void => {
-      const observer = new PerformanceObserver(
-        callbackFixture,
-        new PerformanceObserverTaskQueue()
-      );
+      const observer = new PerformanceObserver(callbackFixture, mockTaskQueue);
       expect((): void =>
         observer.observe({ entryTypes: ["resource"], type: "resource" })
       ).toThrow();
     });
 
     it("should validate entryTypes and ignore any invalid types", (): void => {
-      const observer = new PerformanceObserver(
-        callbackFixture,
-        new PerformanceObserverTaskQueue()
-      );
+      const observer = new PerformanceObserver(callbackFixture, mockTaskQueue);
       observer.observe({ entryTypes: ["resource", "mark", "bad"] });
       expect(observer.entryTypes).toHaveLength(2);
       expect(observer.entryTypes).toEqual(["resource", "mark"]);
     });
 
     it("should warn if invalid entryTypes are supplied", (): void => {
-      const observer = new PerformanceObserver(
-        callbackFixture,
-        new PerformanceObserverTaskQueue()
-      );
+      const observer = new PerformanceObserver(callbackFixture, mockTaskQueue);
       observer.observe({ entryTypes: ["resource", "mark", "bad"] });
-      expect(consoleOutput).toHaveLength(1);
+      expect(mockedConsoleWarn).toHaveBeenCalledTimes(1);
     });
 
     it("should abort if no valid entryTypes are supplied", (): void => {
-      const observer = new PerformanceObserver(
-        callbackFixture,
-        new PerformanceObserverTaskQueue()
-      );
-
+      const observer = new PerformanceObserver(callbackFixture, mockTaskQueue);
       observer.observe({ entryTypes: ["invalid"] });
-      expect(consoleOutput).toHaveLength(1);
-      expect(mockTaskQueueAdd).toHaveBeenCalledTimes(0);
+      expect(mockedConsoleWarn).toHaveBeenCalledTimes(1);
+      expect(mockTaskQueue.add).toHaveBeenCalledTimes(0);
     });
 
     it("should queue observer with valid entryTypes", (): void => {
       const fixture = { entryTypes: ["resource"] };
-      const observer = new PerformanceObserver(
-        callbackFixture,
-        new PerformanceObserverTaskQueue()
-      );
+      const observer = new PerformanceObserver(callbackFixture, mockTaskQueue);
       observer.observe(fixture);
-      expect(mockTaskQueueAdd).toHaveBeenCalledTimes(1);
-      expect(mockTaskQueueAdd).toHaveBeenCalledWith(observer);
+      expect(mockTaskQueue.add).toHaveBeenCalledTimes(1);
+      expect(mockTaskQueue.add).toHaveBeenCalledWith(observer);
     });
 
     it("should queue observer with valid type", (): void => {
       const fixture = { type: "resource" };
-      const observer = new PerformanceObserver(
-        callbackFixture,
-        new PerformanceObserverTaskQueue()
-      );
+      const observer = new PerformanceObserver(callbackFixture, mockTaskQueue);
       observer.observe(fixture);
-      expect(mockTaskQueueAdd).toHaveBeenCalledTimes(1);
-      expect(mockTaskQueueAdd).toHaveBeenCalledWith(observer);
+      expect(mockTaskQueue.add).toHaveBeenCalledTimes(1);
+      expect(mockTaskQueue.add).toHaveBeenCalledWith(observer);
     });
   });
 
   describe("#disconnect", (): void => {
-    beforeEach((): void => mockTaskQueueRemove.mockClear());
+    const mockTaskQueue = mocked(new PerformanceObserverTaskQueue(), true);
+    afterEach((): void => {
+      jest.resetAllMocks();
+    });
 
     it("should remove observer from the task queue", (): void => {
-      const observer = new PerformanceObserver(
-        callbackFixture,
-        new PerformanceObserverTaskQueue()
-      );
+      const observer = new PerformanceObserver(callbackFixture, mockTaskQueue);
       observer.disconnect();
-      expect(mockTaskQueueRemove).toHaveBeenCalledTimes(1);
-      expect(mockTaskQueueRemove).toHaveBeenCalledWith(observer);
+      expect(mockTaskQueue.remove).toHaveBeenCalledTimes(1);
+      expect(mockTaskQueue.remove).toHaveBeenCalledWith(observer);
     });
   });
 

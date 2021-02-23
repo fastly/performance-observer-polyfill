@@ -61,7 +61,7 @@ As the polyfill implements the PerformanceObserver interface by falling back to 
 ## Development
 
 ### Requirements
-- Node.js >= 10a
+- Node.js >= 10
 
 ### Install
 ```sh
