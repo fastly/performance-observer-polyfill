@@ -51,7 +51,7 @@
     "jest-mock-random": "^1.0.2",
     "prettier": "^1.17.1",
     "rollup": "^2.30.0",
-    "rollup-plugin-license": "^2.2.0",
+    "rollup-plugin-license": "^2.9.1",
     "rollup-plugin-serve": "^1.1.0",
     "rollup-plugin-sizes": "^1.0.3",
     "rollup-plugin-terser": "^7.0.2",
