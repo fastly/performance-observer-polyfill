@@ -1,9 +1,6 @@
-Performance Observer Polyfill
-Version: <%= pkg.version %>
-Generated: <%= moment().format("YYYY-MM-DD") %>
-https://github.com/fastly/performance-observer-polyfill
+MIT License
 
-Copyright (c) <%= moment().format("YYYY") %>, Fastly, Inc. All rights reserved.
+Copyright (c) 2024 Fastly
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
